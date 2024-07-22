@@ -1,2 +1,7 @@
-# SpeechPromptAI
-Low Code application created with Flutter and GCP for communication by speech with VertexAI API 
+# speechtotext
+
+A new Flutter project.
+
+## Getting Started
+
+FlutterFlow projects are built to run on the Flutter _stable_ release.
