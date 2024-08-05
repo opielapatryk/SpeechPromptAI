@@ -53,7 +53,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
           : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: const Color(0xFFF1F1F1),
+        backgroundColor: const Color(0xFFC60A0A),
         body: SafeArea(
           top: true,
           child: Column(
