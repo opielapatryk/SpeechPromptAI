@@ -24,11 +24,17 @@ jobs:
           git config --global user.email "xpatrykopiela@gmail.com"
           git config --global user.name "opielapatryk"
 
-      - name: Merge flutterflow into main
+      - name: Fetch and checkout main branch
         run: |
           git fetch origin
           git checkout main
-          git merge flutterflow --no-ff --allow-unrelated-histories -m "Merge branch 'flutterflow' into 'main'"
+  
+      - name: Merge flutterflow into main with conflict resolution
+        run: |
+          git merge flutterflow --no-ff --allow-unrelated-histories || true
+          git ls-files -u | awk '{print $4}' | xargs git checkout --ours
+          git add .
+          git commit -m "Resolved merge conflicts by favoring flutterflow branch"
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
