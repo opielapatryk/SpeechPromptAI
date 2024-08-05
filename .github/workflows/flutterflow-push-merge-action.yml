@@ -1,4 +1,4 @@
-name: flutterflow-push-merge-action
+name: CI
 
 on:
   push:
@@ -8,15 +8,10 @@ on:
   workflow_dispatch:
 
 jobs:
-
-  merge:
+  build:
     runs-on: ubuntu-latest
-    
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-        with:
-          ref: flutterflow
+      - uses: actions/checkout@v4
 
       # Set up Git user identity
       - name: Set up Git user
@@ -24,17 +19,38 @@ jobs:
           git config --global user.email "xpatrykopiela@gmail.com"
           git config --global user.name "opielapatryk"
 
-      - name: Fetch and checkout main branch
+      - name: Fetch and checkout main
         run: |
-          git fetch origin
+          git fetch origin main:main
           git checkout main
-  
-      - name: Merge flutterflow into main with conflict resolution
+
+      - name: Merge flutterflow into main
         run: |
-          git merge flutterflow --no-ff --allow-unrelated-histories || true
-          git ls-files -u | awk '{print $4}' | xargs git checkout --ours
+          git merge flutterflow --allow-unrelated-histories -Xtheirs
+
+      - name: Replace metadata
+        run: |
+          sed -i 's|<meta property="og:description" content="Built with FlutterFlow." />|<meta property="og:description" content="AiComm-Services" />|g' web/index.html
+          sed -i 's|<meta name="twitter:description" content="Built with FlutterFlow." />|<meta name="twitter:description" content="AiComm-Services." />|g' web/index.html
+          sed -i 's|<meta property="og:image" content="https://storage.googleapis.com/flutterflow-prod-hosting/og_splash_gradient.png" />|<meta property="og:image" content="https://storage.googleapis.com/aicomm-insp.appspot.com/assets/images/logo-aicomm.png" />|g' web/index.html
+          sed -i 's|<meta name="twitter:image" content="https://storage.googleapis.com/flutterflow-prod-hosting/og_splash_gradient.png" />|<meta name="twitter:image" content="https://storage.googleapis.com/aicomm-insp.appspot.com/assets/images/logo-aicomm.png" />|g' web/index.html
+
+      - name: Commit changes
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
           git add .
-          git commit -m "Resolved merge conflicts by favoring flutterflow branch"
+          git commit -m "Update metadata" || echo "No changes to commit"
+
+      - name: Push changes
+        run: |
           git push origin main
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Trigger the main branch workflow
+      - name: Trigger main branch workflow
+        run: |
+          curl -X POST \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
+          https://api.github.com/repos/${{ github.repository }}/dispatches \
+          -d '{"event_type":"trigger-main-workflow"}'
