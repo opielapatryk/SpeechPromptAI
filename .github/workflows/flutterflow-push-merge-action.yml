@@ -27,7 +27,7 @@ jobs:
         run: |
           git fetch origin
           git checkout main
-          git merge flutterflow --no-ff --commit -m "Merge branch 'flutterflow' into 'main'"
+          git merge flutterflow --no-ff --commit -m "Merge branch 'flutterflow' into 'main'" --allow-unrelated-histories -Xtheirs
           git push origin main
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
