@@ -28,4 +28,5 @@ jobs:
         with:
           repoToken: ${{ secrets.GITHUB_TOKEN }}
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_API_TEST_F5A8F }}
-          projectId: vivid-grammar-429109-d9
+          channelId: live
+          projectId: api-test-f5a8f
