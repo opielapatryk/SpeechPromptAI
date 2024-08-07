@@ -27,3 +27,17 @@ jobs:
       - name: Merge flutterflow into main
         run: |
           git merge flutterflow --allow-unrelated-histories -Xtheirs
+
+      - name: Commit changes
+        run: |
+          git config --global user.email "github-actions@github.com"
+          git config --global user.name "GitHub Actions"
+          git add .
+          git commit -m "Merge flutterflow into main" || echo "No changes to commit"
+
+      - name: Push changes
+        env:
+          PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
+        run: |
+          git remote set-url origin https://$PAT_TOKEN@github.com/opielapatryk/SpeechPromptAI.git
+          git push origin main
