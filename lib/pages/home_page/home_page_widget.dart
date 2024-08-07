@@ -48,12 +48,10 @@ class _HomePageWidgetState extends State<HomePageWidget> {
     context.watch<FFAppState>();
 
     return GestureDetector(
-      onTap: () => _model.unfocusNode.canRequestFocus
-          ? FocusScope.of(context).requestFocus(_model.unfocusNode)
-          : FocusScope.of(context).unfocus(),
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: const Color(0xFFC60A0A),
+        backgroundColor: const Color(0xFFA08B8B),
         body: SafeArea(
           top: true,
           child: Column(
