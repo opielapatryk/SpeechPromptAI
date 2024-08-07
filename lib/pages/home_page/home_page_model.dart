@@ -7,7 +7,6 @@ import 'package:record/record.dart';
 class HomePageModel extends FlutterFlowModel<HomePageWidget> {
   ///  State fields for stateful widgets in this page.
 
-  final unfocusNode = FocusNode();
   AudioRecorder? audioRecorder;
   String? recording;
   FFUploadedFile recordedFileBytes =
@@ -23,7 +22,5 @@ class HomePageModel extends FlutterFlowModel<HomePageWidget> {
   void initState(BuildContext context) {}
 
   @override
-  void dispose() {
-    unfocusNode.dispose();
-  }
+  void dispose() {}
 }
